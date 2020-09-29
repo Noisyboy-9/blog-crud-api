@@ -16,11 +16,20 @@ class PostsController extends Controller
      */
     private Manager $fractal;
 
+    /**
+     * PostsController constructor.
+     */
     public function __construct()
     {
         $this->fractal = new Manager();
     }
 
+
+    /**
+     * get all posts
+     *
+     * @return array
+     */
     public function index()
     {
         $posts = Post::all();
@@ -30,7 +39,14 @@ class PostsController extends Controller
         return $this->fractal->createData($resource)->toArray();
     }
 
-
+    /**
+     * store a post
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request)
     {
         $attributes = $this->validate($request, [
