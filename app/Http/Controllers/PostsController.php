@@ -11,13 +11,13 @@ class PostsController extends Controller
     {
         $attributes = $this->validate($request, [
             'title' => 'required|unique:posts',
-            'body' => 'required'
+            'body' => 'required',
         ]);
 
         if (Post::create($attributes)) {
             return response()->json([
                 'created' => true,
-                'data' => $attributes
+                'data' => $attributes,
             ], 201);
         }
     }

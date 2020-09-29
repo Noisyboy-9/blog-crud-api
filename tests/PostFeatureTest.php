@@ -13,15 +13,19 @@ class PostFeatureTest extends TestCase
      *
      * @param array $attributes
      *
-     * @note this function persists data to database
+     * @param int   $count
+     *
      * @return array
+     * @note this function persists data to database
      */
-    private function createPost(array $attributes = [])
+    private function createPost(array $attributes = [], int $count = 1)
     {
-        $post = Post::factory()->make($attributes);
-        $post->save();
+        $posts = Post::factory()->count($count)->make($attributes);
+        foreach ($posts as $post) {
+            $post->save();
+        }
 
-        return $post->toArray();
+        return $posts->toArray();
     }
 
     /**
@@ -29,12 +33,33 @@ class PostFeatureTest extends TestCase
      *
      * @param array $attributes
      *
-     * @note this function does not persist data to database
+     * @param int   $count
+     *
      * @return array
+     * @note this function does not persist data to database
      */
-    private function makePost(array $attributes = [])
+    private function makePost(array $attributes = [], int $count = 1)
     {
-        return Post::factory()->make($attributes)->toArray();
+        $posts = Post::factory()->count($count)->make($attributes);
+        // because we have a count function chained to $posts definition an array of posts will be returned so we have to check if the count is 1 to return the just the array containing a title and body
+
+        if ($count === 1) {
+            return $posts->toArray()[0];
+        }
+
+        return $posts->toArray();
+    }
+
+    /** @test * */
+    public function all_posts_can_be_fetched()
+    {
+        $this->withoutExceptionHandling();
+
+        $posts = $this->createPost([], 10);
+
+        $this->get('/posts')
+            ->seeJson($posts)
+            ->assertResponseStatus(200);
     }
 
 
@@ -81,6 +106,4 @@ class PostFeatureTest extends TestCase
         $this->post('/posts', $post2)->assertResponseStatus(422);
         $this->notSeeInDatabase('posts', $post2);
     }
-
-
 }
