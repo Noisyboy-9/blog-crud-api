@@ -25,6 +25,10 @@ class PostFeatureTest extends TestCase
             $post->save();
         }
 
+        if ($count === 1) {
+            return $posts->toArray()[0];
+        }
+
         return $posts->toArray();
     }
 
@@ -54,14 +58,12 @@ class PostFeatureTest extends TestCase
     public function all_posts_can_be_fetched()
     {
         $this->withoutExceptionHandling();
-
         $posts = $this->createPost([], 10);
 
         $this->get('/posts')
             ->seeJsonContains(['data' => $posts])
             ->assertResponseStatus(200);
     }
-
 
     /** @test * */
     public function a_post_can_be_created()
@@ -105,5 +107,16 @@ class PostFeatureTest extends TestCase
 
         $this->post('/posts', $post2)->assertResponseStatus(422);
         $this->notSeeInDatabase('posts', $post2);
+    }
+
+    /** @test * */
+    public function a_post_can_be_generated()
+    {
+        $post = $this->createPost();
+
+
+        $this->get("/posts/{$post['id']}")
+            ->seeJson(['data' => $post])
+            ->assertResponseOk();
     }
 }

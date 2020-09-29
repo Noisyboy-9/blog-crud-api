@@ -7,6 +7,7 @@ use App\Transformers\PostTransformer;
 use Illuminate\Http\Request;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 
 
 class PostsController extends Controller
@@ -36,6 +37,7 @@ class PostsController extends Controller
 
         $resource = new Collection($posts, new PostTransformer());
 
+
         return $this->fractal->createData($resource)->toArray();
     }
 
@@ -63,5 +65,14 @@ class PostsController extends Controller
             'created' => true,
             'post' => $attributes,
         ], 201);
+    }
+
+    public function show($id)
+    {
+        $post = Post::findOrFail($id);
+
+        $resource = new Item($post, new PostTransformer());
+
+        return $this->fractal->createData($resource)->toArray();
     }
 }
