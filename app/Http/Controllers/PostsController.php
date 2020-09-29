@@ -51,10 +51,7 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = $this->validate($request, [
-            'title' => 'required|unique:posts',
-            'body' => 'required',
-        ]);
+        $attributes = $this->validateRequest($request);
 
         Post::create([
             'title' => $attributes['title'],
@@ -67,6 +64,13 @@ class PostsController extends Controller
         ], 201);
     }
 
+    /**
+     * show a post by id
+     *
+     * @param $id
+     *
+     * @return array|null
+     */
     public function show($id)
     {
         $post = Post::findOrFail($id);
@@ -74,5 +78,45 @@ class PostsController extends Controller
         $resource = new Item($post, new PostTransformer());
 
         return $this->fractal->createData($resource)->toArray();
+    }
+
+    /**
+     * update a post by id
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param                          $id
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request, $id)
+    {
+        $attributes = $this->validateRequest($request);
+
+        $post = Post::findOrFail($id);
+
+        $post->update([
+            'title' => $attributes['title'],
+            'body' => $attributes['body'],
+        ]);
+
+        return response()->json([
+            'updated' => true,
+        ], 200);
+    }
+
+    /**
+     * validate the incoming request
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateRequest(Request $request): array
+    {
+        return $this->validate($request, [
+            'title' => 'required|unique:posts',
+            'body' => 'required',
+        ]);
+
     }
 }

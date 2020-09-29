@@ -6,7 +6,7 @@ use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class PostFeatureTest extends TestCase
 {
-    use DatabaseTransactions;
+    use  DatabaseTransactions;
 
     /**
      * create a post and persist it to database
@@ -119,4 +119,25 @@ class PostFeatureTest extends TestCase
             ->seeJson(['data' => $post])
             ->assertResponseOk();
     }
+
+    /** @test * */
+    public function a_post_can_be_updated()
+    {
+        $this->withoutExceptionHandling();
+        $oldPost = $this->createPost();
+
+        $newPost = [
+            'title' => 'new post title',
+            'body' => 'new post body',
+        ];
+
+        $this->put("/posts/{$oldPost['id']}", $newPost)
+            ->seeJson(['updated' => true])
+            ->assertResponseStatus(200);
+
+
+        $this->seeInDatabase('posts', $newPost);
+        $this->notSeeInDatabase('posts', $oldPost);
+    }
+
 }

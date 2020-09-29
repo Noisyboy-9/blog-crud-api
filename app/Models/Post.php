@@ -17,4 +17,9 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = ['title', 'body'];
+
+    public function path()
+    {
+        return "/posts/{$this->id}";
+    }
 }
