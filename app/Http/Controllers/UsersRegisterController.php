@@ -9,19 +9,31 @@ use Illuminate\Support\Str;
 
 class UsersRegisterController extends Controller
 {
-    protected function hashPassword($password)
+    /**
+     * hash incoming password
+     *
+     * @param $password
+     *
+     * @return string
+     */
+    private function hashPassword($password)
     {
         return Crypt::encrypt($password);
     }
 
+
+    /**
+     * generate a remember token
+     *
+     * @return string
+     */
     private function generateRememberToken()
     {
-        return Str::random(32);
+        return Str::random(100);
     }
 
     public function store(Request $request)
     {
-
         $attributes = $this->validate($request, [
             'username' => 'required|unique:users,username',
             'email' => 'required|email:rfc|unique:users,email',
