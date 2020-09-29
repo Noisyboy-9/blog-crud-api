@@ -181,4 +181,15 @@ class PostFeatureTest extends TestCase
         $this->notSeeInDatabase('posts', $newPost);
     }
 
+    /** @test * */
+    public function a_post_can_be_deleted()
+    {
+        $this->withoutExceptionHandling();
+        $post = $this->createPost();
+
+        $this->delete("/posts/{$post['id']}")
+            ->assertResponseStatus(200);
+
+        $this->notSeeInDatabase('posts', $post);
+    }
 }

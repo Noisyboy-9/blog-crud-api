@@ -25,7 +25,6 @@ class PostsController extends Controller
         $this->fractal = new Manager();
     }
 
-
     /**
      * get all posts
      *
@@ -102,6 +101,17 @@ class PostsController extends Controller
         return response()->json([
             'updated' => true,
         ], 200);
+    }
+
+    /**
+     * delete a post
+     *
+     * @param $id
+     */
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
     }
 
     /**
