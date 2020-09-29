@@ -72,4 +72,15 @@ class PostFeatureTest extends TestCase
         $this->notSeeInDatabase('posts', $post);
     }
 
+    /** @test * */
+    public function a_post_title_must_be_unique()
+    {
+        $post1 = $this->createPost(['title' => 'same title']);
+        $post2 = $this->makePost(['title' => 'same title']); // creating 2 posts with same titles
+
+        $this->post('/posts', $post2)->assertResponseStatus(422);
+        $this->notSeeInDatabase('posts', $post2);
+    }
+
+
 }
