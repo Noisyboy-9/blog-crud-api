@@ -59,7 +59,7 @@ class UserRegisterFeatureTest extends TestCase
     }
 
     /** @test * */
-    public function a_user_can_be_created()
+    public function a_user_can_be_created_and_a_access_token_will_be_stored_and_returned()
     {
         $this->withoutExceptionHandling();
 
@@ -71,6 +71,7 @@ class UserRegisterFeatureTest extends TestCase
         ];
 
         $this->post('/register', $user)
+            ->seeJsonStructure(['created' , 'access_token'])
             ->assertResponseStatus(201);
 
 
