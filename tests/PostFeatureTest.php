@@ -140,4 +140,45 @@ class PostFeatureTest extends TestCase
         $this->notSeeInDatabase('posts', $oldPost);
     }
 
+    /** @test * */
+    public function a_title_is_required_for_updating_a_post()
+    {
+        $oldPost = $this->createPost();
+
+        $newPost = $this->makePost([
+            'title' => null // bad title
+        ]);
+
+        $this->put("/posts/{$oldPost['id']}", $newPost)->assertResponseStatus(422);
+
+        $this->seeInDatabase('posts', $oldPost);
+        $this->notSeeInDatabase('posts', $newPost);
+    }
+
+    /** @test * */
+    public function a_body_is_required_for_updating_a_post()
+    {
+        $oldPost = $this->createPost();
+
+        $newPost = $this->makePost([
+            'body' => null // bad body
+        ]);
+
+        $this->put("/posts/{$oldPost['id']}", $newPost)->assertResponseStatus(422);
+
+        $this->seeInDatabase('posts', $oldPost);
+        $this->notSeeInDatabase('posts', $newPost);
+    }
+
+    /** @test * */
+    public function a_post_title_must_be_unique_to_update()
+    {
+        $oldPost = $this->createPost(['title' => 'same title']);
+        $newPost = $this->makePost(['title' => 'same title']);
+        $this->put("/posts/{$oldPost['id']}", $newPost)->assertResponseStatus(422);
+
+        $this->seeInDatabase('posts', $oldPost);
+        $this->notSeeInDatabase('posts', $newPost);
+    }
+
 }
