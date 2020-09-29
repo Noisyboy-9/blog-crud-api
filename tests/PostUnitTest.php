@@ -2,9 +2,11 @@
 
 
 use App\Models\Post;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class PostUnitTest extends TestCase
 {
+    use DatabaseMigrations;
     /**
      * create a post and persist it to database
      *

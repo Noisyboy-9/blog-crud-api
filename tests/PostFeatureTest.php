@@ -2,11 +2,11 @@
 
 
 use App\Models\Post;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class PostFeatureTest extends TestCase
 {
-    use  DatabaseTransactions;
+    use  DatabaseMigrations;
 
     /**
      * create a post and persist it to database
@@ -110,7 +110,7 @@ class PostFeatureTest extends TestCase
     }
 
     /** @test * */
-    public function a_post_can_be_generated()
+    public function a_post_can_be_fetched()
     {
         $post = $this->createPost();
 
