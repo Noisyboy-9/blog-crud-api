@@ -24,10 +24,10 @@ class PostsController extends Controller
     public function index()
     {
         $posts = Post::all();
-        dd($posts);
-//        $resource = new Collection($posts, new PostTransformer());
-//
-//        return $this->fractal->createData($resource)->toArray();
+
+        $resource = new Collection($posts, new PostTransformer());
+
+        return $this->fractal->createData($resource)->toArray();
     }
 
 
