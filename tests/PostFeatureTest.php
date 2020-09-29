@@ -72,7 +72,6 @@ class PostFeatureTest extends TestCase
 
         $this->post('/posts', $post)
             ->seeJson(['created' => true])
-            ->seeJson(['post' => $post])
             ->assertResponseStatus(201);
 
         $this->seeInDatabase('posts', $post);

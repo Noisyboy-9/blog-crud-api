@@ -59,7 +59,6 @@ class PostsController extends Controller
 
         return response()->json([
             'created' => true,
-            'post' => $attributes,
         ], 201);
     }
 
