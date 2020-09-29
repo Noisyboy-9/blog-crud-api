@@ -2,11 +2,11 @@
 
 
 use App\Models\Post;
-use Laravel\Lumen\Testing\DatabaseMigrations;
+use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class PostFeatureTest extends TestCase
 {
-    use  DatabaseMigrations;
+    use  DatabaseTransactions;
 
     /**
      * create a post and persist it to database
